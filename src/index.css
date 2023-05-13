@@ -282,8 +282,8 @@ button {
 }
 
 button:hover {
-
-  background-color: #1ed760;
+  color:#1ed760;
+  background-color: white;
 
 }
 
@@ -313,7 +313,7 @@ img {
 
             color: #fff;
 
-            padding: 20px;
+            padding: 10px;
 
             text-align: center;
 
