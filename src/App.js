@@ -1,13 +1,17 @@
-
 import React from 'react';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import MusicSearch from './components/MusicSearch';
-import './index.css';
+import SongPlayer from './components/SongPlayer';
 
 const App = () => {
   return (
-    <div className="App">
-      <MusicSearch />
-    </div>
+    <Router>
+      <Switch>
+        <Route exact path="/" component={MusicSearch} />
+        <Route path="/song/:id" component={SongPlayer} />
+      </Switch>
+    </Router>
   );
 };
 
