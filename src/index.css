@@ -11,3 +11,352 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+          /* Global Styles */
+
+* {
+
+    box-sizing: border-box;
+
+}
+
+body {
+
+    margin: 0;
+
+    padding: 0;
+
+    font-family: Arial, sans-serif;
+
+    background-color: #000;
+
+    color: #fff;
+
+}
+
+/* Header Styles */
+
+header {
+
+    background-color: #000;
+
+    padding: 20px;
+
+    text-align: center;
+
+}
+
+h1 {
+
+    font-size: 32px;
+
+    margin: 0;
+
+}
+
+/* Search Styles */
+
+.search-container {
+
+    display: flex;
+
+    justify-content: center;
+
+    margin-top: 50px;
+
+}
+
+.search-container input[type="text"] {
+
+    padding: 10px;
+
+    width: 300px;
+
+    font-size: 16px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    outline: none;
+
+    background-color: #222;
+
+    color: #fff;
+
+}
+
+.search-container button {
+
+    padding: 10px 20px;
+
+    margin-left: 10px;
+
+    font-size: 16px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    background-color: #1db954;
+
+    color: #fff;
+
+    cursor: pointer;
+
+}
+
+.search-container button:hover {
+
+    background-color: #0a8043;
+
+}
+
+/* Results Styles */
+
+#results {
+
+    margin-top: 50px;
+
+}
+
+.song {
+
+    margin-bottom: 20px;
+
+    padding: 20px;
+
+    background-color: #222;
+
+    border-radius: 5px;
+
+}
+
+.song h3 {
+
+    margin: 0;
+
+    font-size: 18px;
+
+    font-weight: bold;
+
+}
+
+/* Popup Styles */
+
+#popup {
+
+    position: fixed;
+
+    top: 0;
+
+    left: 0;
+
+    width: 100%;
+
+    height: 100%;
+
+    background-color: rgba(0, 0, 0, 0.7);
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    z-index: 999;
+
+    display: none;
+
+}
+
+#popup-content {
+
+    background-color: #222;
+
+    padding: 20px;
+
+    border-radius: 10px;
+
+    text-align: center;
+
+    position: relative;
+
+}
+
+#popup-title {
+
+    font-size: 24px;
+
+    margin-top: 0;
+
+}
+
+#popup-download-buttons a {
+
+    display: block;
+
+    margin-bottom: 10px;
+
+    padding: 10px;
+
+    text-align: center;
+
+    background-color: #1db954;
+
+    color: #fff;
+
+    text-decoration: none;
+
+    border-radius: 5px;
+
+}
+
+#popup-download-buttons a:hover {
+
+    background-color: #0a8043;
+
+}
+
+#popup-close {
+
+    position: absolute;
+
+    top: 10px;
+
+    right: 10px;
+
+    font-size: 24px;
+
+    color: #fff;
+
+    cursor: pointer;
+
+}
+
+#songInput {
+
+    padding: 10px;
+
+    width: 300px;
+
+    font-size: 16px;
+
+    border: none;
+
+    border-radius: 20px;
+
+    outline: none;
+
+    background-color: #222;
+
+    color: #fff;
+
+}
+
+button {
+
+  background-color: #1db954;
+
+  color: white;
+
+  border: none;
+
+  padding: 12px 32px;
+
+  text-align: center;
+
+  text-decoration: none;
+
+  display: inline-block;
+
+  font-size: 16px;
+
+  margin: 4px 2px;
+
+  cursor: pointer;
+
+  border-radius: 30px;
+
+  transition-duration: 0.4s;
+
+}
+
+button:hover {
+
+  background-color: #1ed760;
+
+}
+
+img {
+
+  width: 150px;
+
+  height: 150px;
+
+}
+
+        /* ... your existing CSS styles ... */
+
+        
+
+        #cookie-popup {
+
+            position: fixed;
+
+            bottom: 0;
+
+            left: 0;
+
+            width: 100%;
+
+            background-color: rgba(0, 0, 0, 0.7);
+
+            color: #fff;
+
+            padding: 20px;
+
+            text-align: center;
+
+            z-index: 999;
+
+        }
+
+        
+
+        #cookie-popup-content {
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+        }
+
+        
+
+        #cookie-popup-message {
+
+            flex: 1;
+
+            margin-right: 20px;
+
+        }
+
+        
+
+        #cookie-popup-accept {
+
+            background-color: #1db954;
+
+            border: none;
+
+            color: #fff;
+
+            padding: 10px 20px;
+
+            border-radius: 20px;
+
+            cursor: pointer;
+
+        }
