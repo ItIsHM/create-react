@@ -10,7 +10,10 @@
     "web-vitals": "^3.0.4",
     "axios": "^0.21.4",
     "react-router-dom":"^6.11.1",
-    "js-file-download":"^0.4.12"
+    "js-file-download":"^0.4.12",
+    "ioredis":"^5.3.2",
+    "swr":"^2.1.5",
+    "fetcher":"^0.3.0"
   },
   "scripts": {
     "start": "react-scripts start",
