@@ -9,7 +9,7 @@ const SongPlayer = () => {
   useEffect(() => {
     const fetchSong = async () => {
       try {
-        const response = await axios.get(`https://saavn.me/song/${id}`);
+        const response = await axios.get(`https://saavn.me/songs?id=${id}`);
         const data = response.data;
 
         if (data && data.url) {
