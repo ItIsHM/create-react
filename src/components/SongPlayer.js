@@ -7,11 +7,14 @@ const SongPlayer = () => {
   const { id } = useParams();
   const [song, setSong] = useState(null);
   const [loading, setLoading] = useState(true);
+const HM = process.env.HM;
+
+
 
   useEffect(() => {
     const fetchSong = async () => {
       try {
-        const response = await axios.get(`https://saavn.me/songs?id=${id}`);
+        const response = await axios.get(`${HM}/songs?id=${id}`);
         const data = response.data;
 
         if (data && data.status === "SUCCESS" && data.data && data.data.length > 0) {
