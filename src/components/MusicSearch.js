@@ -138,19 +138,15 @@ const MusicSearch = () => {
 
             <h2 id="popup-title">{popupTitle}</h2>
 
-            <div id="popup-download-buttons">
+            
 
-              {popupDownloadButtons.map((download, index) => (
-
-                <a key={index} className="popup-download-button" href={download.link}>
-
-                  {download.quality}
-
-                </a>
-
-              ))}
-
-            </div>
+<div id="popup-download-buttons">
+  {popupDownloadButtons.map((download, index) => (
+    <button key={index} className="popup-download-button" onClick={() => window.open(download.link, "_blank")}>
+      {download.quality}
+    </button>
+  ))}
+</div>
 
             <button onClick={closeDownloadPopup}>Close</button>
 
