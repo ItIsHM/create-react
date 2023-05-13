@@ -112,8 +112,9 @@ const MusicSearch = () => {
               <button onClick={closeDownloadPopup}>Close</button>
             </div>
                   </center>
-      )}
-    </div>
+     </div>
+     )}
+    
   );
 };
 
