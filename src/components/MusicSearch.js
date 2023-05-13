@@ -59,11 +59,8 @@ const MusicSearch = () => {
         <div id="cookie-popup">
           <div id="cookie-popup-content">
             <div id="cookie-popup-message">
-              This site is under construction, currently download in mp4 format, you can rename it to m4a/mp3 format
+              Made with ♥️ by HM
             </div>
-            <button id="cookie-popup-accept" onClick={acceptCookies}>
-              Ok
-            </button>
           </div>
         </div>
       )}
