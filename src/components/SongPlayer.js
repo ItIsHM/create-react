@@ -52,7 +52,7 @@ const SongPlayer = () => {
   return (
     <div style={{ textAlign: 'center' }}>
       <h1>{song.name}</h1>
-      <img src={song.image[0].link} alt="Song Thumbnail" style={{ width: '150px', height: '150px' }} />
+      <img src={song.image[2].link} alt="Song Thumbnail" style={{ width: '150px', height: '150px' }} />
       <p>Artist: {song.primaryArtists}</p>
       <audio controls>
         <source src={song.url} type="audio/mp3" />
