@@ -112,6 +112,7 @@ const MusicSearch = () => {
               <Link
                 to={`/song/${song.id
 }`
+}
       <div key={song.id} className="song">
         <img src={song.image[2].link} alt="Thumbnail" />
         <p>{song.name}</p>
