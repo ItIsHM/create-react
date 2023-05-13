@@ -10,7 +10,8 @@
     "web-vitals": "^3.0.4",
     "axios": "^0.21.4",
     "react-router-dom":"^6.11.1",
-    "js-file-download":"^0.4.12"
+    "js-file-download":"^0.4.12",
+    "color-thief-react":"^2.1.0"
   },
   "scripts": {
     "start": "react-scripts start",
