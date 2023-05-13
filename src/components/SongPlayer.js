@@ -38,7 +38,7 @@ const SongPlayer = () => {
     <div>
       <h1>{song.title}</h1>
       <audio controls>
-        <source src={song.url} type="audio/mp3" />
+        <source src={song.url} type="audio/mp4" />
       </audio>
       <div>
         {Object.entries(song.download_urls).map(([quality, url]) => (
