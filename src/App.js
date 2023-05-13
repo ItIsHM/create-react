@@ -7,12 +7,14 @@ import SongPlayer from './components/SongPlayer';
 const App = () => {
   return (
     <Router>
-      <Switch>
+     <Layout>
+      <Routes>
         
         <Route path='/' element={<MusicSearch/>} />
         
         <Route path='/song/:id' element={<SongPlayer/>} />
-      </Switch>
+            </Routes>
+          </Layout>
     </Router>
   );
 };
