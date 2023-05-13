@@ -10,7 +10,9 @@ const MusicSearch = () => {
   const [cookieAccepted, setCookieAccepted] = useState(false);
 
   const searchSongs = async () => {
-    const apiUrl = `https://saavn.me/search/songs?query=${encodeURIComponent(
+    
+
+const apiUrl = `${process.env.HM}/search/songs?query=${encodeURIComponent(
       songInput
     )}&page=1&limit=25`;
 
