@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-import { Route, Switch } from 'react-router-dom';
-
+import { Routes ,Route } from 'react-router-dom';
 const SongPlayer = () => {
   const { id } = useParams();
   const [song, setSong] = useState(null);
