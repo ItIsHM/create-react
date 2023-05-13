@@ -114,7 +114,7 @@ const MusicSearch = () => {
                   </center>
      </div>
      )}
-    
+    </div>
   );
 };
 
