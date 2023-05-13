@@ -2,6 +2,40 @@ import React from 'react';
 import download from 'js-file-download';
 
 function Player(props) {
+  
+  
+
+const SongPlayer = () => {
+
+  const [song, setSong] = useState(null);
+
+  useEffect(() => {
+
+    // Your code to fetch the song data and set it to the state
+
+    // Example code to fetch the song
+
+    const fetchSong = async () => {
+
+      try {
+
+        const response = await fetch('https://saavn.me/songs?id=${id}');
+
+        const data = await response.json();
+
+        setSong(data);
+
+      } catch (error) {
+
+        console.error('An error occurred while fetching the song:', error);
+
+      }
+
+    };
+
+    fetchSong();
+
+  }, []);
   /**
    * Helper function for downloadSong
    * @param {} blob The blobURL of the song.
