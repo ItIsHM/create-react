@@ -6,6 +6,19 @@ import SongPlayer from './components/SongPlayer';
 
 const App = () => {
   return (
+    <LoadingBar
+
+          color='#1DB954'
+
+          progress={progress}
+
+          height={3}
+
+          shadow={false}
+
+          onLoaderFinished={() => setProgress(0)}
+
+        />
     <Router>
      
       <Routes>
