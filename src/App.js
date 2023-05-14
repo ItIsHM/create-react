@@ -18,8 +18,8 @@ const App = () => {
       />
       <Router>
         <Routes>
-          <Route path='/' element={<MusicSearch />} />
-          <Route path='/song/:id' element={<SongPlayer />} />
+          <Route path='/' element={<MusicSearch setProgress={setProgress} />} />
+          <Route path='/song/:id' element={<SongPlayer setProgress={setProgress} />} />
         </Routes>
       </Router>
     </>
