@@ -38,33 +38,26 @@ function Showcase(props) {
 
     return array;
   };
-
-  const getShowcase = (data, type) => {
-    let data_showcase = [];
-    let count = 0;
-
-    while (count < 10) {
-      if (
-        data_showcase.length === 4 ||
-        !data ||
-        !data[count] ||
-        data[count].type !== type
-      ) {
-        break;
-      }
-
-      let data_name = data[count].name ? data[count].name : data[count].title;
-      data_showcase.push({
-        name: data_name,
-        image: data[count].image[2].link,
-        id: data[count].id,
-      });
-
-      count += 1;
+const getShowcase = (data, type) => {
+  let data_showcase = [];
+  let count = 0;
+  
+  while (count < 10) {
+    if (!data || !Array.isArray(data) || count >= data.length || !data[count] || data[count].type !== type) {
+      break;
     }
+    let data_name = data[count].name ? data[count].name : data[count].title;
+    data_showcase.push({
+      name: data_name,
+      image: data[count].image && data[count].image[2] ? data[count].image[2].link : null,
+      id: data[count].id
+    });
+    count += 1;
+  }
+  
+  return shuffle(data_showcase);
+};
 
-    return shuffle(data_showcase);
-  };
 
   const setHomepageData = async () => {
     let uri = 'https://down-spot.vercel.app/modules?language=malayalam';
