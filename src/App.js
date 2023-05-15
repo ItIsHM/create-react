@@ -19,8 +19,8 @@ const App = () => {
       />
       <Router>
         <Routes>
-          <Route path='/' element={<Home />} />
-          <Route path='/Search' element={<MusicSearch />} />
+          <Route path='/Search' element={<Home />} />
+          <Route path='/' element={<MusicSearch />} />
           <Route path='/song/:id' element={<SongPlayer />} />
         </Routes>
       </Router>
