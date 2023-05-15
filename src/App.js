@@ -19,9 +19,9 @@ const App = () => {
       />
       <Router>
         <Routes>
-          <Route path='/' element={<Home setProgress={setProgress} />} />
-          <Route path='/Search' element={<MusicSearch setProgress={setProgress} />} />
-          <Route path='/song/:id' element={<SongPlayer setProgress={setProgress} />} />
+          <Route path='/' element={<Home />} />
+          <Route path='/Search' element={<MusicSearch />} />
+          <Route path='/song/:id' element={<SongPlayer />} />
         </Routes>
       </Router>
     </>
