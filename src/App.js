@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoadingBar from 'react-top-loading-bar';
 import MusicSearch from './components/MusicSearch';
 import SongPlayer from './components/SongPlayer';
+import Home from './components/Home/Showcase/Showcase';
 
 const App = () => {
   const [progress, setProgress] = useState(0);
@@ -18,7 +19,8 @@ const App = () => {
       />
       <Router>
         <Routes>
-          <Route path='/' element={<MusicSearch setProgress={setProgress} />} />
+          <Route path='/' element={<Home setProgress={setProgress} />} />
+          <Route path='/Search' element={<MusicSearch setProgress={setProgress} />} />
           <Route path='/song/:id' element={<SongPlayer setProgress={setProgress} />} />
         </Routes>
       </Router>
