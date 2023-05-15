@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoadingBar from 'react-top-loading-bar';
 import MusicSearch from './components/MusicSearch';
 import SongPlayer from './components/SongPlayer';
-import Home from './components/Home/Showcase/Showcase';
+import Home from './components/MusicPage';
 
 const App = () => {
   const [progress, setProgress] = useState(0);
