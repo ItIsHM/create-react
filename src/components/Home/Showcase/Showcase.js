@@ -58,25 +58,38 @@ const getShowcase = (data, type) => {
   return shuffle(data_showcase);
 };
 
+const setHomepageData = async () => {
+  let uri = 'https://down-spot.vercel.app/modules?language=malayalam';
 
-  const setHomepageData = async () => {
-    let uri = 'https://down-spot.vercel.app/modules?language=malayalam';
+  props.setProgress(30);
+  let data = await fetch(uri);
+  props.setProgress(50);
 
-    props.setProgress(30);
-    let data = await fetch(uri);
-    props.setProgress(50);
+  let resp = await data.json();
+  console.log('API Response:', resp); // Add this line to check the response
 
-    let resp = await data.json();
-    props.setProgress(70);
+  props.setProgress(70);
 
-    setTrendingSongs(getShowcase(resp['data']['trending']['songs'], 'song'));
-    setTrendingAlbums(getShowcase(resp['data']['trending']['albums'], 'album'));
-    setTopAlbums(getShowcase(resp['data']['albums'], 'album'));
-    setPlaylists(getShowcase(resp['data']['playlists'], 'playlist'));
-    setCharts(getShowcase(resp['data']['charts'], 'playlist'));
+  // Check if the expected data is present in the response
+  console.log('Data:', resp['data']); // Add this line to check the 'data' property
 
-    props.setProgress(100);
-  };
+  // Trending songs:
+  setTrendingSongs(getShowcase(resp['data']['trending']['songs'], 'song'));
+
+  // Trending albums:
+  setTrendingAlbums(getShowcase(resp['data']['trending']['albums'], 'album'));
+
+  // Top albums:
+  setTopAlbums(getShowcase(resp['data']['albums'], 'album'));
+
+  // Playlists:
+  setPlaylists(getShowcase(resp['data']['playlists'], 'playlist'));
+
+  // Charts:
+  setCharts(getShowcase(resp['data']['charts'], 'playlist'));
+
+  props.setProgress(100);
+};
 
   useEffect(() => {
     document.body.scrollTop = document.documentElement.scrollTop = 0;
