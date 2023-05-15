@@ -18,17 +18,17 @@ function Showcase(props) {
   const [charts, setCharts] = useState([]);
 
   const searchFromId = async (id) => {
-    let raw_resp = await fetch(`https://jiosaavn-api-codyandersan.vercel.app/songs?id=${id}`);
+    let raw_resp = await fetch(`https://down-spot.vercel.app/songs?id=${id}`);
     let resp = await raw_resp.json();
     props.setDetails(resp.data[0]);
-    navigate('/listen');
+    navigate('/song/:id');
   };
 
   /**
    * Main function that fetches homepage API sets the homepage data
    */
   const setHomepageData = async () => {
-    let uri = 'https://jiosaavn-api-codyandersan.vercel.app/modules?language=hindi';
+    let uri = 'https://down-spot.vercel.app/modules?language=malayalam';
 
     props.setProgress(30);
     let data = await fetch(uri);
