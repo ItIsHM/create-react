@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import download from 'js-file-download';
-import * as jsmediatags from 'jsmediatags';
+import * as id3 from 'node-id3';
 
 const SongPlayer = () => {
   const { id } = useParams();
@@ -32,7 +32,7 @@ const SongPlayer = () => {
   const handleDownload = async (url, buttonId) => {
     try {
       const response = await axios.get(url, {
-        responseType: 'blob',
+        responseType: 'arraybuffer',
         onDownloadProgress: (progressEvent) => {
           const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
           const button = document.getElementById(buttonId);
@@ -40,26 +40,31 @@ const SongPlayer = () => {
           button.disabled = true;
         },
       });
-      const songBlob = response.data;
+      const songBuffer = Buffer.from(response.data);
       const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
+
+      const imageData = await axios.get(song.image[2].link, {
+        responseType: 'arraybuffer',
+      });
+      const imageBuffer = Buffer.from(imageData.data);
 
       const tags = {
         title: song.name,
         artist: song.primaryArtists,
-        picture: {
-          url: song.image[1].link,
-          type: 'image/jpeg', // Adjust the type if necessary
+        image: {
+          mime: 'image/jpeg', // Adjust the mime type if necessary
+          type: {
+            id: 3, // The ID3 tag type for album art
+            name: 'front cover',
+          },
+          description: 'Album Cover',
+          imageBuffer,
         },
         // Add more metadata fields as needed
       };
 
-      jsmediatags.write(songBlob, tags, 'audio/mp3', (error, taggedSongBlob) => {
-        if (error) {
-          console.error('An error occurred while adding metadata:', error);
-        } else {
-          download(taggedSongBlob, filename);
-        }
-      });
+      id3.write(tags, songBuffer);
+      download(songBuffer, filename);
     } catch (error) {
       console.error('An error occurred while downloading the song:', error);
     }
