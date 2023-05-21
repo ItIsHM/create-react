@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import download from 'js-file-download';
+import * as jsmediatags from 'jsmediatags';
 
 const SongPlayer = () => {
   const { id } = useParams();
@@ -41,7 +42,24 @@ const SongPlayer = () => {
       });
       const songBlob = response.data;
       const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
-      download(songBlob, filename);
+
+      const tags = {
+        title: song.name,
+        artist: song.primaryArtists,
+        picture: {
+          url: song.image[1].link,
+          type: 'image/jpeg', // Adjust the type if necessary
+        },
+        // Add more metadata fields as needed
+      };
+
+      jsmediatags.write(songBlob, tags, 'audio/mp3', (error, taggedSongBlob) => {
+        if (error) {
+          console.error('An error occurred while adding metadata:', error);
+        } else {
+          download(taggedSongBlob, filename);
+        }
+      });
     } catch (error) {
       console.error('An error occurred while downloading the song:', error);
     }
