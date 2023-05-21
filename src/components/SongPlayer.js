@@ -29,62 +29,63 @@ const SongPlayer = () => {
     };
     fetchSong();
   }, [id]);
+const handleDownload = async (url, buttonId) => {
+  try {
+    const response = await axios.get(url, {
+      responseType: 'blob',
+      onDownloadProgress: (progressEvent) => {
+        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+        const button = document.getElementById(buttonId);
+        button.textContent = `Preparing Download ${progress}%`;
+        button.disabled = true;
+      },
+    });
+    const songBlob = response.data;
+    const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
 
-  const handleDownload = async (url, buttonId) => {
-    try {
-      const response = await axios.get(url, {
+    const tags = {
+      title: song.name,
+      artist: song.primaryArtists,
+      // Add more metadata fields as needed
+    };
+
+    const metadata = await parseBlob(songBlob);
+    metadata.common.title = tags.title;
+    metadata.common.artist = tags.artist;
+
+    if (song.image.length > 0) {
+      const imageData = await axios.get(song.image[1].link, {
         responseType: 'blob',
-        onDownloadProgress: (progressEvent) => {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          const button = document.getElementById(buttonId);
-          button.textContent = `Preparing Download ${progress}%`;
-          button.disabled = true;
-        },
       });
-      const songBlob = response.data;
-      const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
-
-      const tags = {
-        title: song.name,
-        artist: song.primaryArtists,
-        // Add more metadata fields as needed
-      };
-
-      const metadata = await parseBlob(songBlob);
-      metadata.common.title = tags.title;
-      metadata.common.artist = tags.artist;
-
-      if (song.image.length > 0) {
-        const imageData = await axios.get(song.image[2].link, {
-          responseType: 'blob',
-        });
-        const imageBlob = imageData.data;
-        const imageType = imageData.headers['content-type'];
-        metadata.common.picture = [
-          {
-            data: imageBlob,
-            format: imageType,
-            description: 'Album Cover',
-          },
-        ];
-      }
-
-      const updatedFile = new Blob([songBlob], { type: metadata.type });
-      const updatedTags = {
-        ...metadata.common,
-        ...tags,
-      };
-
-      const writer = new ID3Writer(updatedFile);
-      writer.setTags(updatedTags);
-      writer.addTag();
-
-      const taggedSongBlob = writer.getBlob();
-      download(taggedSongBlob, filename);
-    } catch (error) {
-      console.error('An error occurred while downloading the song:', error);
+      const imageBlob = imageData.data;
+      const imageType = imageData.headers['content-type'];
+      metadata.common.picture = [
+        {
+          data: imageBlob,
+          format: imageType,
+          description: 'Album Cover',
+        },
+      ];
     }
-  };
+
+    const updatedFile = new Blob([songBlob], { type: metadata.format });
+    const updatedTags = {
+      ...metadata.common,
+      ...tags,
+    };
+
+    const writer = new ID3Writer(updatedFile);
+    writer.setTags(updatedTags);
+    writer.addTag();
+    writer.addImage(0, await (await fetch(song.image[1].link)).arrayBuffer(), 'image/jpeg');
+
+    writer.getBlob((blob) => {
+      download(blob, filename);
+    });
+  } catch (error) {
+    console.error('An error occurred while downloading the song:', error);
+  }
+};
 
   if (loading) {
     return (
