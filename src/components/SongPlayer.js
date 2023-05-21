@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import download from 'js-file-download';
 import { parseBlob } from 'music-metadata-browser';
-import { ID3Writer } from 'browser-id3-writer';
+import { Metadata } from 'metadata-react';
 
 const SongPlayer = () => {
   const { id } = useParams();
@@ -29,63 +29,55 @@ const SongPlayer = () => {
     };
     fetchSong();
   }, [id]);
-const handleDownload = async (url, buttonId) => {
-  try {
-    const response = await axios.get(url, {
-      responseType: 'blob',
-      onDownloadProgress: (progressEvent) => {
-        const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-        const button = document.getElementById(buttonId);
-        button.textContent = `Preparing Download ${progress}%`;
-        button.disabled = true;
-      },
-    });
-    const songBlob = response.data;
-    const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
 
-    const tags = {
-      title: song.name,
-      artist: song.primaryArtists,
-      // Add more metadata fields as needed
-    };
-
-    const metadata = await parseBlob(songBlob);
-    metadata.common.title = tags.title;
-    metadata.common.artist = tags.artist;
-
-    if (song.image.length > 0) {
-      const imageData = await axios.get(song.image[1].link, {
+  const handleDownload = async (url, buttonId) => {
+    try {
+      const response = await axios.get(url, {
         responseType: 'blob',
-      });
-      const imageBlob = imageData.data;
-      const imageType = imageData.headers['content-type'];
-      metadata.common.picture = [
-        {
-          data: imageBlob,
-          format: imageType,
-          description: 'Album Cover',
+        onDownloadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const button = document.getElementById(buttonId);
+          button.textContent = `Preparing Download ${progress}%`;
+          button.disabled = true;
         },
-      ];
+      });
+      const songBlob = response.data;
+      const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
+
+      const tags = {
+        title: song.name,
+        artist: song.primaryArtists,
+        // Add more metadata fields as needed
+      };
+
+      const metadata = await parseBlob(songBlob);
+      metadata.common.title = tags.title;
+      metadata.common.artist = tags.artist;
+
+      if (song.image.length > 0) {
+        const imageData = await axios.get(song.image[1].link, {
+          responseType: 'arraybuffer',
+        });
+        const imageArrayBuffer = imageData.data;
+        const imageType = imageData.headers['content-type'];
+        metadata.common.picture = [
+          {
+            data: imageArrayBuffer,
+            format: imageType,
+            description: 'Album Cover',
+          },
+        ];
+      }
+
+      const metadataArray = new Uint8Array(await metadata.write());
+
+      const updatedSongBlob = new Blob([metadataArray, songBlob], { type: 'audio/mpeg' });
+
+      download(updatedSongBlob, filename);
+    } catch (error) {
+      console.error('An error occurred while downloading the song:', error);
     }
-
-    const updatedFile = new Blob([songBlob], { type: metadata.format });
-    const updatedTags = {
-      ...metadata.common,
-      ...tags,
-    };
-
-    const writer = new ID3Writer(updatedFile);
-    writer.setTags(updatedTags);
-    writer.addTag();
-    writer.addImage(0, await (await fetch(song.image[1].link)).arrayBuffer(), 'image/jpeg');
-
-    writer.getBlob((blob) => {
-      download(blob, filename);
-    });
-  } catch (error) {
-    console.error('An error occurred while downloading the song:', error);
-  }
-};
+  };
 
   if (loading) {
     return (
