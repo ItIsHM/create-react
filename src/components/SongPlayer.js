@@ -40,7 +40,7 @@ const SongPlayer = () => {
         },
       });
       const songBlob = response.data;
-      const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.m4a`;
+      const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
       download(songBlob, filename);
     } catch (error) {
       console.error('An error occurred while downloading the song:', error);
