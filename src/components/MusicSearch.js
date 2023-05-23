@@ -1,131 +1,78 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import { Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
+import download from 'js-file-download';
 
-const MusicSearch = () => {
-  const [songInput, setSongInput] = useState('');
-  const [results, setResults] = useState([]);
-  const [popupVisible, setPopupVisible] = useState(false);
-  const [popupTitle, setPopupTitle] = useState('');
-  const [popupDownloadButtons, setPopupDownloadButtons] = useState([]);
-  const [searching, setSearching] = useState(false);
+const SongPlayer = () => {
+  const { id } = useParams();
+  const [song, setSong] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const searchSongs = async () => {
-    if (songInput.trim() === '') {
-      return;
-    }
-
-    setSearching(true);
-
-    const apiUrl = `https://down-spot.vercel.app/search/songs?query=${encodeURIComponent(
-      songInput
-    )}&page=1&limit=25`;
-
-    try {
-      const response = await axios.get(apiUrl);
-      const data = response.data;
-
-      if (data && data.data && data.data.results && data.data.results.length > 0) {
-        setResults(data.data.results);
-      } else {
-        setResults([]);
+  useEffect(() => {
+    const fetchSong = async () => {
+      try {
+        const response = await axios.get(`https://down-spot.vercel.app/songs?id=${id}`);
+        const data = response.data;
+        if (data && data.status === 'SUCCESS' && data.data && data.data.length > 0) {
+          setSong(data.data[0]);
+        } else {
+          setSong(null);
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+        setSong(null);
+      } finally {
+        setLoading(false);
       }
+    };
+    fetchSong();
+  }, [id]);
+
+  const handleDownload = async (url, buttonId) => {
+    try {
+      const response = await axios.get(url, {
+        responseType: 'blob',
+        onDownloadProgress: (progressEvent) => {
+          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+          const button = document.getElementById(buttonId);
+          button.textContent = `Preparing Download ${progress}%`;
+          button.disabled = true;
+        },
+      });
+      const songBlob = response.data;
+      const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
+      download(songBlob, filename);
     } catch (error) {
-      console.error('An error occurred:', error);
-      setResults([]);
-    } finally {
-      setSearching(false);
+      console.error('An error occurred while downloading the song:', error);
     }
   };
 
-  const showDownloadPopup = (song) => {
-    const downloadUrls = song.more_info.encrypted_media_urls;
+  if (loading) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+        <div style={{ fontSize: '24px', textAlign: 'center', animation: 'blink-animation 1s infinite' }}>Loading...</div>
+      </div>
+    );
+  }
 
-    const downloadButtons = Object.entries(downloadUrls).map(([quality, url]) => {
-      return (
-        <button key={quality} className="popup-download-button" onClick={() => window.open(url, '_blank')}>
-          {quality}
-        </button>
-      );
-    });
-
-    setPopupTitle(song.title);
-    setPopupDownloadButtons(downloadButtons);
-    setPopupVisible(true);
-  };
-
-  const closeDownloadPopup = () => {
-    setPopupVisible(false);
-  };
+  if (!song) {
+    return <div>No song found.</div>;
+  }
 
   return (
-    <div>
-      <center>
-        <h1>Music Search</h1>
-        <input
-          type="text"
-          id="songInput"
-          placeholder="Enter a song name"
-          value={songInput}
-          onChange={(e) => setSongInput(e.target.value)}
-        />
-        <button onClick={searchSongs} disabled={searching}>
-          {searching ? (
-            <span
-              style={{
-                animation: 'blink-animation 1s infinite',
-              }}
-            >
-              Searching...
-            </span>
-          ) : (
-            'Search'
-          )}
-        </button>
-
-        <div id="results">
-          {results.map((song) => (
-            <div key={song.id} className="song">
-              <img src={song.image[2].link} alt="Thumbnail" />
-              <p>{song.name}</p>
-              <p>{song.primaryArtists}</p>
-              <Link
-                to={`/song/${song.id}`}
-                style={{
-                  backgroundColor: '#1DB954',
-                  color: 'white',
-                  border: 'none',
-                  borderRadius: '4px',
-                  padding: '8px 16px',
-                  margin: '4px',
-                  fontSize: '14px',
-                  textDecoration: 'none',
-                }}
-              >
-                Download
-              </Link>
-            </div>
-          ))}
-        </div>
-
-        {popupVisible && (
-          <div id="popup">
-            <div id="popup-content">
-              <h2 id="popup-title">{popupTitle}</h2>
-              <div id="popup-download-buttons">{popupDownloadButtons}</div>
-              <button onClick={closeDownloadPopup}>Close</button>
-            </div>
-
-          </div>
-
-        )}
-
-      </center>
-
+    <div style={{ textAlign: 'center' }}>
+      <h1>{song.name}</h1>
+      <img src={song.image[1].link} alt="Song Thumbnail" style={{ width: '150px', height: '150px' }} />
+      <p>Artist: {song.primaryArtists}</p>
+      <div>
+        {song.downloadUrl.map((item, index) => (
+          <button key={item.quality} onClick={() => handleDownload(item.link, `downloadButton-${index}`)} id={`downloadButton-${index}`}>
+            Download {item.quality}
+          </button>
+        ))}
+      </div>
     </div>
-
   );
-
 };
 
-export default MusicSearch;
+export default SongPlayer;
