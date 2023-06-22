@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import download from 'js-file-download';
-import './blobdownloader.js';
+import './BlobDownloader.js';
 
 const SongPlayer = () => {
   const { id } = useParams();
