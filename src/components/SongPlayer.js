@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import download from 'js-file-download';
+import './blobdownloader.js';
 
 const SongPlayer = () => {
   const { id } = useParams();
@@ -34,22 +35,24 @@ const SongPlayer = () => {
 
   const handleDownload = async (url, buttonId) => {
     try {
-      const response = await axios.get(url, {
-        responseType: 'blob',
-        onDownloadProgress: (progressEvent) => {
-          const progress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-          const button = document.getElementById(buttonId);
-          button.textContent = `Preparing Download ${progress}%`;
-          button.disabled = true;
-        },
-      });
-      const songBlob = response.data;
-      const filename = `${song.name} - ${song.primaryArtists.split(',')[0]}.mp3`;
-      download(songBlob, filename);
+      gonativeDownloadBlobUrl(url);
     } catch (error) {
       console.error('An error occurred while downloading the song:', error);
     }
   };
+
+  useEffect(() => {
+    window.addEventListener('message', (event) => {
+      const message = JSON.parse(event.data);
+      if (message && message.event === 'fileEnd') {
+        console.log('File download completed:', message.id);
+      }
+    });
+
+    return () => {
+      window.removeEventListener('message');
+    };
+  }, []);
 
   const handleQualityChange = (quality) => {
     setSelectedQuality(quality);
@@ -58,7 +61,9 @@ const SongPlayer = () => {
   if (loading) {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
-        <div style={{ fontSize: '24px', textAlign: 'center', animation: 'blink-animation 1s infinite' }}>Loading...</div>
+        <div style={{ fontSize: '24px', textAlign: 'center', animation: 'blink-animation 1s infinite' }}>
+          Loading...
+        </div>
       </div>
     );
   }
@@ -97,7 +102,7 @@ const SongPlayer = () => {
             color: '#fff',
             border: 'none',
             borderRadius: '4',
-                      padding: '16px 24px',
+            padding: '16px 24px',
             fontSize: '16px',
             fontWeight: 'bold',
             textTransform: 'uppercase',
@@ -131,4 +136,3 @@ const SongPlayer = () => {
 };
 
 export default SongPlayer;
-
